@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Caption Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #cfeaf0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 400px;
+            margin-top: 80px; /* Adjust as needed */
+        }
+        .container h1 {
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            border: 2px dashed #d3d3d3;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .upload-box:hover {
+            background-color: #f0f0f0;
+        }
+        .select-tone, .select-language, .additional-info {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #d3d3d3;
+        }
+        .generate-button {
+            background-color: #6c63ff;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .generate-button:hover {
+            background-color: #5a52e0;
+        }
+        .output-section {
+            margin-top: 20px;
+        }
+        .output-section img {
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Multilingual Image Captioning with Voice Assistance</h1>
+    </div>
+    <div class="container">    
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <div class="upload-box" onclick="document.getElementById('upload').click();">
+                <input type="file" name="image" id="upload" style="display:none;">
+                <p>Upload or drop a file right here</p>
+                <p>JPG, PNG</p>
+            </div>     
+        
+            <label for="target_language">Select the target language:</label><br>
+            <select name="target_language">
+                {% for lang in languages %}
+                    <option value="{{ lang.code }}">{{ lang.name }}</option>
+                {% endfor %}
+            </select><br><br>
+            <button type="submit" class="generate-button">Generate Captions</button>
+        </form>
+
+        <div class="output-section">
+            {% if image %}
+            <h2>Image</h2>
+            <img src="data:image/jpeg;base64,{{ image }}" height="200" width="200">
+            {% endif %}
+
+            {% if caption %}
+            <h2>Caption</h2>
+            <p>"{{ caption }}"</p>
+            {% endif %}
+
+            {% if generation_message %}
+            <p><i>{{ generation_message }}</i></p>
+            {% endif %}
+            {% if translated_text %}
+            <h2>Translated text:</h2>
+            <audio controls>
+            <source src="{{ audio_filename }}" type="audio/mpeg">
+            </audio>
+            <p>{{ translated_text }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
